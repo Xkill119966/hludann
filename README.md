@@ -1,12 +1,10 @@
-## ESTORE BLACKHELIO - EXPRESS.JS SERVER BOILERPLATE
+## HLU DANN
 
-### September 2019 version
+### Clothing Donation Application - Server
 
-- clean folder structure
+- Thuta
 
-- Authentication [ JWT ]
+- Thu Rein Htun
 
-- Mongoose Models
-- PM2 Setup for production and development
-- Initial Controllers
-- Initial Routes
+- Hay Mar San
+- Zay Phyo
