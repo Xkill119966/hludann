@@ -1,7 +1,7 @@
 {
-	"name": "bh-mern",
+	"name": "hludann-api",
 	"version": "1.0.0",
-	"description": "server boilerplate",
+	"description": "hlu dann api endpoints",
 	"main": "server.js",
 	"scripts": {
 		"start": "node server/server.js",

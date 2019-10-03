@@ -46,6 +46,5 @@ module.exports = function(app) {
 		res.json({ message: "HluDann Server running at 5006" });
 	});
 
-	// api middlewares
 	app.use("/api/v1/users", userRoutes);
 };
