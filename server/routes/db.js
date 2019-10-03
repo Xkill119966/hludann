@@ -9,7 +9,7 @@ module.exports = function() {
 	mongoose
 		.connect(process.env.MONGO_URI, { useNewUrlParser: true })
 		.then(() => {
-			console.log("mongoDB Up ");
+			console.log("mongoDB Running ");
 		})
 		.catch(err => {
 			console.log("cannot connect to mongoDB");

@@ -41,7 +41,7 @@ module.exports = function(app) {
 	// app.get("/", function(req, res) {
 	// 	res.sendFile(path.resolve(appPath, "index.html"));
 	// });
-
+	app.get("/favicon.ico", (req, res) => res.sendStatus(204));
 	app.get("/", (req, res) => {
 		res.json({ message: "HluDann Server running at 5006" });
 	});

@@ -21,18 +21,6 @@ const userSchema = new Schema({
 		type: String,
 		enum: ["DONOR", "TRAVELLER", "LOCAL"]
 	},
-	address: {
-		line1: {
-			type: String
-		},
-		line2: {
-			type: String
-		},
-		region: {
-			type: String
-		}
-	},
-
 	password: {
 		type: String
 	},

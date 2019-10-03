@@ -7,12 +7,28 @@ const donorSchema = new Schema(
 			type: mongoose.SchemaTypes.ObjectId,
 			ref: "User"
 		},
-		donations: [
-			{
-				type: mongoose.SchemaTypes.ObjectId,
-				ref: "Donation"
+		location: {
+			type: {
+				type: String,
+				enum: ["Point"],
+				required: true
+			},
+			coordinates: {
+				type: [Number],
+				required: true
 			}
-		]
+		},
+		address: {
+			line1: {
+				type: String
+			},
+			township: {
+				type: String
+			},
+			region: {
+				type: String
+			}
+		}
 	},
 	{
 		timestamps: true
