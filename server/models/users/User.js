@@ -4,13 +4,33 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const userSchema = new Schema({
-	name: {
+	username: {
 		type: String,
-		minlength: 5,
-		maxlength: 50
+		minlength: 4,
+		maxlength: 50,
+		required: true
 	},
 	email: {
 		type: String
+	},
+	phone: {
+		type: Number,
+		required: true
+	},
+	user_type: {
+		type: String,
+		enum: ["DONOR", "TRAVELLER", "LOCAL"]
+	},
+	address: {
+		line1: {
+			type: String
+		},
+		line2: {
+			type: String
+		},
+		region: {
+			type: String
+		}
 	},
 
 	password: {
