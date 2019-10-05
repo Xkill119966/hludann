@@ -1,30 +1,166 @@
 const { User } = require("../models/users/User");
+const { Donor } = require('../models/users/Donor')
+const { Traveller } = require('../models/users/Traveller')
+const { Local } = require('../models/users/Donor');
 const { getAccountkitData } = require("../services/facebookAccountkit");
-const register = function(req, res) {
-	let { email, password, username } = req.body;
 
-	if (!email || !password) {
+const register = function (req, res) {
+	//Register Type
+	const userType = req.query.type;
+
+	let { email, password, username, phone } = req.body;
+
+	if (!email || !password || !username || !phone) {
 		return res.status(402).send({
 			errors: [
-				{ title: "Data missing!", detail: "Provide email and password!" }
+				{ title: "Data missing!", detail: "Please Provide Data!" }
 			]
 		});
 	}
 
-	const user = new User({
+	user = new User({
+
 		username: username,
 		email: email,
-		password: password
+		password: password,
+		phone: phone,
+		user_type: userType
 	});
 
-	user.save((err, userDoc) => {
-		if (err) {
-			return res.json({ success: false, errors: {} });
+
+	User.findOne({ email: email }, (err, userFound) => {
+		let error = {};
+
+		if (userFound) {
+			error.email = "email is already in used";
+			return res.status(500).json({
+				success: false,
+				errors: error
+			});
+		} else {
+			/**
+			 * userType (depend on user type which user is Donar , Traveller, Local)
+			 */
+			user.save((err, userDoc) => {
+				if (err) {
+					console.log(err);
+					
+					error.err = "user information is save in error";
+					return res.status(500).json({
+						success: false,
+						errors: error
+					});
+				} else {
+					switch (userType) {
+						case 'DONOR':
+							const donor = new Donor({
+
+								user_id: userDoc._id,
+
+							});
+
+							donor.save((err, donor) => {
+								if (err) {
+									error.err = "saving donor error";
+									return res.status(500).json({
+										success: false,
+										errors: error
+									});
+								} else {
+									userDoc.generateToken((err, user) => {
+										if (err) {
+											error.err = "something went wrong in generate token";
+											return res.status(500).json({
+												success: false,
+												errors: error
+											});
+										}
+
+										res.status(200).send({ success: true, token: user.token });
+									});
+								}
+							})
+
+
+							break;
+						case 'TRAVELLER':
+							const traveller = new Traveller({
+								user_id: userDoc._id,
+							});
+
+							traveller.save((err, traveller) => {
+								if (err) {
+									error.err = "something went wrong in saving traveller";
+									return res.status(500).json({
+										success: false,
+										errors: error
+									});
+								} else {
+									userDoc.generateToken((err, user) => {
+										if (err) {
+											error.err = "something went wrong in generate token";
+											res.status(500).json({
+												success: false,
+												errors: error
+											});
+										}
+
+										res.status(200).send({
+											success: true,
+											token: user.token,
+											
+										});
+									});
+								}
+							})
+							break;
+						case 'LOCAL':
+							const local = new Local({
+								user_id: userDoc._id,
+							});
+
+							local.save((err, local) => {
+								if (err) {
+									error.err = "something went wrong in register";
+									return res.status(500).json({
+										success: false,
+										errors: error
+									});
+								} else {
+
+									userDoc.generateToken((err, user) => {
+										if (err) {
+											error.err = "something went wrong in generate token";
+											return res.status(500).json({
+												success: false,
+												errors: error
+											});
+										}
+
+										res.status(200).send({
+											success: true,
+											token: user.token,
+											
+										});
+									});
+
+								}
+							})
+							break;
+						default:
+							break;
+
+					}
+				}
+			})
+
+
 		}
+	})
+}
 
-		res.status(500).json({ success: true });
-	});
-};
+
+
 const accountkitLogin = (req, res) => {
 	// call accountkit service function and get phonenumber and access token
 	getAccountkitData(req.body.code, phone => {
@@ -55,7 +191,7 @@ const accountkitLogin = (req, res) => {
 		});
 	});
 };
-const login = function(req, res) {
+const login = function (req, res) {
 	User.findOne({ email: req.body.email }, (err, user) => {
 		if (!user) {
 			return res.json({
@@ -80,7 +216,7 @@ const login = function(req, res) {
 	});
 };
 
-const fbLogin = function(req, res) {
+const fbLogin = function (req, res) {
 	const { email, name, accessToken } = req.body;
 
 	// TO-DO
@@ -120,7 +256,7 @@ const fbLogin = function(req, res) {
 	});
 };
 
-const auth = function(req, res) {
+const auth = function (req, res) {
 	if (!req.user.facebook) {
 		res.status(200).json({
 			email: req.user.email,
@@ -138,7 +274,7 @@ const auth = function(req, res) {
 	}
 };
 
-const logout = function(req, res) {
+const logout = function (req, res) {
 	User.findOneAndUpdate(
 		{ _id: req.user._id },
 		{ token: "" },
