@@ -1,6 +1,7 @@
 const aws = require("aws-sdk");
 const multer = require("multer");
 const multerS3 = require("multer-s3");
+const config = require("../config");
 
 const s3 = new aws.S3({
 	endpoint: "sgp1.digitaloceanspaces.com",
@@ -36,7 +37,7 @@ const upload = multer({
 			cb(null, { fieldName: file.fieldname });
 		},
 		key: function(req, file, cb) {
-			cb(null, `${req.user.username}_${req.user._id}_${Date.now().toString()}`);
+			cb(null, `${Date.now().toString()}`);
 		}
 	})
 });
