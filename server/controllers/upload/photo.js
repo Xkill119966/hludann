@@ -25,6 +25,8 @@ exports.S3Upload = function(req, res) {
 			});
 		}
 		var files = req.files;
+
+		console.log("files", req.files);
 		results = files.map(file => {
 			return {
 				public_id: file.key,

@@ -33,7 +33,7 @@ const upload = multer({
 		bucket: "estore",
 		metadata: function(req, file, cb) {
 			// s3 url link sent back
-
+			console.log("file", file);
 			cb(null, { fieldName: file.fieldname });
 		},
 		key: function(req, file, cb) {

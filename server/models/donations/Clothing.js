@@ -9,7 +9,16 @@ const clothingSchema = new Schema(
 		},
 		type: {
 			type: String,
-			enum: ["SHIRT", "PANT", "HAT", "SHORT", "SHOE", "SKIRT", "TROUSER"]
+			enum: [
+				"SHIRT",
+				"PANT",
+				"HAT",
+				"SHORT",
+				"SHOE",
+				"SKIRT",
+				"TROUSER",
+				"OTHER"
+			]
 		},
 		qty: {}
 	},
