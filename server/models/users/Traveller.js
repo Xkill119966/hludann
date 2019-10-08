@@ -17,12 +17,10 @@ const travellerSchema = new Schema(
 		location: {
 			type: {
 				type: String,
-				enum: ["Point"],
-				required: true
+				enum: ["Point"]
 			},
 			coordinates: {
-				type: [Number],
-				required: true
+				type: [Number]
 			}
 		},
 		address: {

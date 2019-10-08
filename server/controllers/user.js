@@ -1,10 +1,10 @@
 const { User } = require("../models/users/User");
-const { Donor } = require('../models/users/Donor')
-const { Traveller } = require('../models/users/Traveller')
-const { Local } = require('../models/users/Donor');
+const { Donor } = require("../models/users/Donor");
+const { Traveller } = require("../models/users/Traveller");
+const { Local } = require("../models/users/Donor");
 const { getAccountkitData } = require("../services/facebookAccountkit");
 
-const register = function (req, res) {
+const register = function(req, res) {
 	//Register Type
 	const userType = req.query.type;
 
@@ -12,21 +12,17 @@ const register = function (req, res) {
 
 	if (!email || !password || !username || !phone) {
 		return res.status(402).send({
-			errors: [
-				{ title: "Data missing!", detail: "Please Provide Data!" }
-			]
+			errors: [{ title: "Data missing!", detail: "Please Provide Data!" }]
 		});
 	}
 
 	user = new User({
-
 		username: username,
 		email: email,
 		password: password,
 		phone: phone,
 		user_type: userType
 	});
-
 
 	User.findOne({ email: email }, (err, userFound) => {
 		let error = {};
@@ -43,8 +39,6 @@ const register = function (req, res) {
 			 */
 			user.save((err, userDoc) => {
 				if (err) {
-					console.log(err);
-					
 					error.err = "user information is save in error";
 					return res.status(500).json({
 						success: false,
@@ -52,11 +46,9 @@ const register = function (req, res) {
 					});
 				} else {
 					switch (userType) {
-						case 'DONOR':
+						case "DONOR":
 							const donor = new Donor({
-
-								user_id: userDoc._id,
-
+								user_id: userDoc._id
 							});
 
 							donor.save((err, donor) => {
@@ -79,17 +71,18 @@ const register = function (req, res) {
 										res.status(200).send({ success: true, token: user.token });
 									});
 								}
-							})
-
+							});
 
 							break;
-						case 'TRAVELLER':
+						case "TRAVELLER":
 							const traveller = new Traveller({
-								user_id: userDoc._id,
+								user_id: userDoc._id
 							});
 
 							traveller.save((err, traveller) => {
+								console.log("err", err);
 								if (err) {
+									console.log("err", err);
 									error.err = "something went wrong in saving traveller";
 									return res.status(500).json({
 										success: false,
@@ -107,16 +100,15 @@ const register = function (req, res) {
 
 										res.status(200).send({
 											success: true,
-											token: user.token,
-											
+											token: user.token
 										});
 									});
 								}
-							})
+							});
 							break;
-						case 'LOCAL':
+						case "LOCAL":
 							const local = new Local({
-								user_id: userDoc._id,
+								user_id: userDoc._id
 							});
 
 							local.save((err, local) => {
@@ -127,7 +119,6 @@ const register = function (req, res) {
 										errors: error
 									});
 								} else {
-
 									userDoc.generateToken((err, user) => {
 										if (err) {
 											error.err = "something went wrong in generate token";
@@ -139,27 +130,20 @@ const register = function (req, res) {
 
 										res.status(200).send({
 											success: true,
-											token: user.token,
-											
+											token: user.token
 										});
 									});
-
 								}
-							})
+							});
 							break;
 						default:
 							break;
-
 					}
 				}
-			})
-
-
+			});
 		}
-	})
-}
-
-
+	});
+};
 
 const accountkitLogin = (req, res) => {
 	// call accountkit service function and get phonenumber and access token
@@ -191,7 +175,7 @@ const accountkitLogin = (req, res) => {
 		});
 	});
 };
-const login = function (req, res) {
+const login = function(req, res) {
 	User.findOne({ email: req.body.email }, (err, user) => {
 		if (!user) {
 			return res.json({
@@ -216,7 +200,7 @@ const login = function (req, res) {
 	});
 };
 
-const fbLogin = function (req, res) {
+const fbLogin = function(req, res) {
 	const { email, name, accessToken } = req.body;
 
 	// TO-DO
@@ -256,7 +240,7 @@ const fbLogin = function (req, res) {
 	});
 };
 
-const auth = function (req, res) {
+const auth = function(req, res) {
 	if (!req.user.facebook) {
 		res.status(200).json({
 			email: req.user.email,
@@ -274,7 +258,7 @@ const auth = function (req, res) {
 	}
 };
 
-const logout = function (req, res) {
+const logout = function(req, res) {
 	User.findOneAndUpdate(
 		{ _id: req.user._id },
 		{ token: "" },
