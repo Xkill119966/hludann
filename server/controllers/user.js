@@ -90,6 +90,8 @@ const register = function (req, res) {
 
 							traveller.save((err, traveller) => {
 								if (err) {
+									console.log(err);
+									
 									error.err = "something went wrong in saving traveller";
 									return res.status(500).json({
 										success: false,
