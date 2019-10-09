@@ -68,12 +68,13 @@ userSchema.methods.generateToken = function(cb) {
 
 // finding user by matching token
 
-userSchema.statics.findByToken = function(token, cb) {
+userSchema.statics.findByToken = function (token, cb) {
+
 	var user = this;
 	// verify token coming from request and compare with user's token
 	// if match >> will receive decode >> find correct user by comparing _id with decode since we sign jwt as user._id
-	jwt.verify(token, "yoursecret", function(err, decode) {
-		user.findOne({ _id: decode, token: token }, function(err, user) {
+	jwt.verify(token, "secret", function (err, decode) {
+		user.findOne({ _id: decode, token: token }, function (err, user) {
 			if (err) return cb(err);
 			cb(null, user);
 		});

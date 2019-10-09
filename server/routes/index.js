@@ -7,16 +7,15 @@ const path = require("path");
 const config = require("../config/index");
 // API routes
 const userRoutes = require("./api/user");
-const donationRoutes = require("./api/donation");
-const uploadRoutes = require("./api/upload");
+const uploadRoutes = require('./api/upload');
 
-module.exports = function(app) {
+module.exports = function (app) {
 	// const accessLogStream = fs.createWriteStream(
 	// 	path.join(`${__dirname}/..`, "access.log"),
 	// 	{ flags: "a" }
 	// );
 	var whitelist = [process.env.FRONTEND_URL];
-	var corsOptionsDelegate = function(req, callback) {
+	var corsOptionsDelegate = function (req, callback) {
 		var corsOptions;
 		if (whitelist.indexOf(req.header("Origin")) !== -1) {
 			corsOptions = { origin: true, credentials: true }; // reflect (enable) the requested origin in the CORS response
@@ -49,6 +48,5 @@ module.exports = function(app) {
 	});
 
 	app.use("/api/v1/users", userRoutes);
-	app.use(`/api/v1/donations`, donationRoutes);
-	app.use(`/api/v1/upload`, uploadRoutes);
+	app.use("/api/v1/upload", uploadRoutes)
 };
