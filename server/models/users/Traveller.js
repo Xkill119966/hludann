@@ -14,6 +14,15 @@ const travellerSchema = new Schema(
 			},
 			locals: [{ type: mongoose.SchemaTypes.ObjectId, ref: "Local" }]
 		},
+		location: {
+			type: {
+				type: String,
+				enum: ["Point"]
+			},
+			coordinates: {
+				type: [Number]
+			}
+		},
 		address: {
 			line1: {
 				type: String

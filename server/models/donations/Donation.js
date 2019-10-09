@@ -46,6 +46,16 @@ const donationSchema = new Schema(
 					type: mongoose.SchemaTypes.ObjectId,
 					ref: "Clothing"
 				}
+			],
+			images: [
+				{
+					url: {
+						type: String
+					},
+					id: {
+						type: String
+					}
+				}
 			]
 		}
 	},
