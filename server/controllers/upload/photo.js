@@ -3,22 +3,20 @@ const aws = require("aws-sdk");
 const upload = require("../../services/image-upload");
 const S3Upload = upload.any();
 
-
-
 const s3 = new aws.S3({
 	endpoint: "sgp1.digitaloceanspaces.com",
 	accessKeyId: process.AWS_ACCESS_KEY_ID,
 	secretAccessKey: process.AWS_ACCESS_KEY_SECRET
 });
 
-exports.S3Upload = function (req, res) {
+exports.S3Upload = function(req, res) {
 	S3Upload(req, res, err => {
 		if (err) {
+			console.log("err", err);
 			return res.status(422).send({
 				erorrs: [{ title: "Image upload error", detail: err.message }]
 			});
 		}
-
 
 		var files = req.files;
 
@@ -36,7 +34,7 @@ exports.S3Upload = function (req, res) {
 		});
 	});
 };
-exports.S3UploadSingle = function (req, res) {
+exports.S3UploadSingle = function(req, res) {
 	S3Upload(req, res, err => {
 		if (err) {
 			return res.status(422).send({
@@ -56,7 +54,7 @@ exports.S3UploadSingle = function (req, res) {
 	});
 };
 
-exports.S3Delete = function (req, res) {
+exports.S3Delete = function(req, res) {
 	const { imageId, productId } = req.params;
 	console.log(imageId);
 	console.log(productId);
@@ -71,7 +69,7 @@ exports.S3Delete = function (req, res) {
 		}
 	);
 	var params = { Bucket: "estore", Key: imageId };
-	s3.deleteObject(params, function (err, data) {
+	s3.deleteObject(params, function(err, data) {
 		if (err) console.log(err, err.stack);
 		// error
 		else console.log("deleted"); // deleted

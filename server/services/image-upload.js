@@ -21,11 +21,14 @@ const upload = multer({
 		bucket: "estore",
 		metadata: function(req, file, cb) {
 			// s3 url link sent back
+			console.log("request", req);
 			console.log("before s3", file);
-			console.log("before s32", req);
+
 			cb(null, { fieldName: file.fieldname });
 		},
 		key: function(req, file, cb) {
+			console.log("req", req);
+			console.log("file", file);
 			cb(null, `${req.user.username}_${req.user._id}_${Date.now().toString()}`);
 		}
 	})
