@@ -1,13 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const uploadControllers = require("../../controllers/upload/photo");
-const { authMiddleware } = require("../../middlewares/auth");
+const { authMiddleware } = require("../../middleware/auth");
 
-router.post("/s3", authMiddleware, uploadControllers.S3Upload);
-router.post("/s3single", authMiddleware, uploadControllers.S3UploadSingle);
-router.post(
-	"/s3/delete/:productId/:imageId",
-	authMiddleware,
-	uploadControllers.S3Delete
-);
+router.post("/", authMiddleware, uploadControllers.S3Upload);
+
 module.exports = router;

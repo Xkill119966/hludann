@@ -1,15 +1,9 @@
 // const cloudinary = require("cloudinary");
-var aws = require("aws-sdk");
-var multer = require("multer");
-var multerS3 = require("multer-s3");
+const aws = require("aws-sdk");
 const upload = require("../../services/image-upload");
 const S3Upload = upload.any();
-const S3UploadSingle = upload.single("file");
-// cloudinary.config({
-// 	cloud_name: config.CD_CLOUD_NAME,
-// 	api_key: config.CD_CLOUD_API_KEY,
-// 	api_secret: config.CD_CLOUD_API_SECRET
-// });
+
+
 
 const s3 = new aws.S3({
 	endpoint: "sgp1.digitaloceanspaces.com",
@@ -17,13 +11,15 @@ const s3 = new aws.S3({
 	secretAccessKey: process.AWS_ACCESS_KEY_SECRET
 });
 
-exports.S3Upload = function(req, res) {
+exports.S3Upload = function (req, res) {
 	S3Upload(req, res, err => {
 		if (err) {
 			return res.status(422).send({
 				erorrs: [{ title: "Image upload error", detail: err.message }]
 			});
 		}
+
+
 		var files = req.files;
 		results = files.map(file => {
 			return {
@@ -38,7 +34,7 @@ exports.S3Upload = function(req, res) {
 		});
 	});
 };
-exports.S3UploadSingle = function(req, res) {
+exports.S3UploadSingle = function (req, res) {
 	S3Upload(req, res, err => {
 		if (err) {
 			return res.status(422).send({
@@ -58,7 +54,7 @@ exports.S3UploadSingle = function(req, res) {
 	});
 };
 
-exports.S3Delete = function(req, res) {
+exports.S3Delete = function (req, res) {
 	const { imageId, productId } = req.params;
 	console.log(imageId);
 	console.log(productId);
@@ -73,7 +69,7 @@ exports.S3Delete = function(req, res) {
 		}
 	);
 	var params = { Bucket: "estore", Key: imageId };
-	s3.deleteObject(params, function(err, data) {
+	s3.deleteObject(params, function (err, data) {
 		if (err) console.log(err, err.stack);
 		// error
 		else console.log("deleted"); // deleted
