@@ -83,7 +83,7 @@ const register = function(req, res) {
 								console.log("err", err);
 								if (err) {
 									console.log(err);
-									
+
 									error.err = "something went wrong in saving traveller";
 									return res.status(500).json({
 										success: false,
@@ -242,21 +242,86 @@ const fbLogin = function(req, res) {
 };
 
 const auth = function(req, res) {
-	if (!req.user.facebook) {
-		res.status(200).json({
-			email: req.user.email,
-			username: req.user.username,
-			isAuth: true,
-			authType: "local"
-		});
-	} else {
-		res.status(200).json({
-			email: req.user.facebook.email,
-			username: req.user.facebook.username,
-			isAuth: true,
-			authType: "facebook"
-		});
+	const { type } = req.query;
+	let user_id = req.user._id;
+
+	switch (type) {
+		case "TRAVELLER":
+			Traveller.findOne({
+				user_id
+			})
+				.populate("user_id")
+				.then(traveller => {
+					res.status(200).send({
+						success: true,
+						user: traveller
+					});
+				})
+				.catch(err => {
+					console.log("auth error", err);
+					res.status(500).send({
+						success: false,
+						errors: "Error in Auth Traveller"
+					});
+				});
+			break;
+		case "LOCAL":
+			Local.findOne({
+				user_id
+			})
+				.populate("user_id")
+				.then(local => {
+					res.status(200).send({
+						success: true,
+						user: local
+					});
+				})
+				.catch(err => {
+					console.log("auth error", err);
+					res.status(500).send({
+						success: false,
+						errors: "Error in Auth Traveller"
+					});
+				});
+			break;
+		case "DONOR":
+			Donor.findOne({
+				user_id
+			})
+				.populate("user_id")
+				.then(donor => {
+					res.status(200).send({
+						success: true,
+						user: donor
+					});
+				})
+				.catch(err => {
+					console.log("auth error", err);
+					res.status(500).send({
+						success: false,
+						errors: "Error in Auth Traveller"
+					});
+				});
+			break;
+
+		default:
+			break;
 	}
+	// if (!req.user.facebook) {
+	// 	res.status(200).json({
+	// 		email: req.user.email,
+	// 		username: req.user.username,
+	// 		isAuth: true,
+	// 		authType: "local"
+	// 	});
+	// } else {
+	// 	res.status(200).json({
+	// 		email: req.user.facebook.email,
+	// 		username: req.user.facebook.username,
+	// 		isAuth: true,
+	// 		authType: "facebook"
+	// 	});
+	// }
 };
 
 const logout = function(req, res) {

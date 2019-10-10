@@ -11,6 +11,7 @@ const s3 = new aws.S3({
 
 exports.S3Upload = function(req, res) {
 	S3Upload(req, res, err => {
+		console.log("request", req);
 		if (err) {
 			console.log("err", err);
 			return res.status(422).send({
