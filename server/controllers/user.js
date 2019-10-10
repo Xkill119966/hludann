@@ -4,7 +4,7 @@ const { Traveller } = require("../models/users/Traveller");
 const { Local } = require("../models/users/Donor");
 const { getAccountkitData } = require("../services/facebookAccountkit");
 
-const register = function(req, res) {
+const register = function (req, res) {
 	//Register Type
 	const userType = req.query.type;
 
@@ -83,7 +83,7 @@ const register = function(req, res) {
 								console.log("err", err);
 								if (err) {
 									console.log(err);
-									
+
 									error.err = "something went wrong in saving traveller";
 									return res.status(500).json({
 										success: false,
@@ -176,7 +176,7 @@ const accountkitLogin = (req, res) => {
 		});
 	});
 };
-const login = function(req, res) {
+const login = function (req, res) {
 	User.findOne({ email: req.body.email }, (err, user) => {
 		if (!user) {
 			return res.json({
@@ -201,7 +201,7 @@ const login = function(req, res) {
 	});
 };
 
-const fbLogin = function(req, res) {
+const fbLogin = function (req, res) {
 	const { email, name, accessToken } = req.body;
 
 	// TO-DO
@@ -241,7 +241,7 @@ const fbLogin = function(req, res) {
 	});
 };
 
-const auth = function(req, res) {
+const auth = function (req, res) {
 	if (!req.user.facebook) {
 		res.status(200).json({
 			email: req.user.email,
@@ -259,7 +259,7 @@ const auth = function(req, res) {
 	}
 };
 
-const logout = function(req, res) {
+const logout = function (req, res) {
 	User.findOneAndUpdate(
 		{ _id: req.user._id },
 		{ token: "" },

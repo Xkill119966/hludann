@@ -8,7 +8,7 @@ const config = require("../config/index");
 // API routes
 const userRoutes = require("./api/user");
 const uploadRoutes = require('./api/upload');
-
+const donorRoutes = require('./api/donation')
 module.exports = function (app) {
 	// const accessLogStream = fs.createWriteStream(
 	// 	path.join(`${__dirname}/..`, "access.log"),
@@ -49,4 +49,5 @@ module.exports = function (app) {
 
 	app.use("/api/v1/users", userRoutes);
 	app.use("/api/v1/upload", uploadRoutes)
+	app.use("/api/v1/donations", donorRoutes)
 };

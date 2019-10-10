@@ -30,4 +30,32 @@ const createDonation = (req, res) => {
 		}
 	});
 };
-module.exports = {};
+
+const createClothes = (req, res) => {
+	let { category, type, qty } = req.body;
+	const newClothes = new Clothing({
+		category: category,
+		type: type,
+		qty: qty
+	})
+
+	newClothes.save((err, clothes) => {
+		if (err) {
+			res.status(500).send({
+				errors: {
+					errors: "error in create donation"
+				}
+			});
+		} else {
+			res.status(200).send({
+				clothes: clothes,
+				succcess: true
+			});
+		}
+	})
+}
+
+module.exports = {
+	createDonation,
+	createClothes
+};
