@@ -5,7 +5,7 @@ const createDonation = (req, res) => {
 	const { donar_id, items, images } = req.body;
 
 	const bag = {
-		total: items.legth || 0,
+		total: items.length || 0,
 		items,
 		images
 	};
@@ -30,6 +30,46 @@ const createDonation = (req, res) => {
 		}
 	});
 };
+
+
+
+const getDonationByProcess = (req, res) => {
+	let { type } = req.query.type;
+
+	let donationType;
+
+	switch (type) {
+		case 'ENROUTE':
+			donationType = type
+			break;
+		case 'ALL':
+			donationType = type
+		case 'FAILED':
+			donationType = type
+
+		default:
+			break;
+	}
+	Donation.find({ 'process.type': donationType })
+		.populate({ path: 'bag.items.cloth_id' })
+		.exec(function (err, docs) {
+			if (err) {
+				res.status(500).send({
+					success: false
+				})
+			} else {
+				console.log('HhF');
+
+				res.status(200).send({
+					donations: docs,
+					success: true
+				});
+			}
+		});
+
+
+
+}
 
 const createClothes = (req, res) => {
 	let { category, type, qty } = req.body;
@@ -57,5 +97,6 @@ const createClothes = (req, res) => {
 
 module.exports = {
 	createDonation,
-	createClothes
+	createClothes,
+	getDonationByProcess
 };

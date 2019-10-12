@@ -20,7 +20,10 @@ const clothingSchema = new Schema(
 				"OTHER"
 			]
 		},
-		qty: {}
+		qty: {
+			type: Number,
+			default: 0
+		}
 	},
 	{
 		timestamps: true

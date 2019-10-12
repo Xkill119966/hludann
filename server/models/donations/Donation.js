@@ -6,7 +6,7 @@ const donationSchema = new Schema(
 		process: {
 			type: String,
 			default: "OPEN",
-			enum: ["COMPLETED", "OPEN", "ENROUTE", "FAILED"]
+			enum: ["COMPLETED", "OPEN", "ENROUTE", "FAILED", "ALL"]
 		},
 		date: {
 			start: {
@@ -28,7 +28,8 @@ const donationSchema = new Schema(
 			},
 			donor_id: {
 				type: mongoose.SchemaTypes.ObjectId,
-				ref: "Donor"
+				ref: "Donor",
+				autopopulate: true
 			},
 			traveller_id: {
 				type: mongoose.SchemaTypes.ObjectId,
@@ -43,8 +44,13 @@ const donationSchema = new Schema(
 			},
 			items: [
 				{
-					type: mongoose.SchemaTypes.ObjectId,
-					ref: "Clothing"
+					cloth_id: {
+						type: mongoose.SchemaTypes.ObjectId,
+						ref: "Clothing",
+						autopopulate: true
+						
+					}
+
 				}
 			],
 			images: [
@@ -63,6 +69,9 @@ const donationSchema = new Schema(
 		timestamps: true
 	}
 );
+
+donationSchema.plugin(require('mongoose-autopopulate'));
+
 
 const Donation = mongoose.model("Donation", donationSchema);
 module.exports = {
