@@ -44,9 +44,16 @@ const getDonationByProcess = (req, res) => {
 			break;
 		case 'ALL':
 			donationType = type
+			break;
 		case 'FAILED':
 			donationType = type
-
+			break;
+		case 'OPEN':
+			donationType = type
+			break;
+		case 'COMPLETED':	
+		 	donationType = type
+		 	break;
 		default:
 			break;
 	}
@@ -58,7 +65,7 @@ const getDonationByProcess = (req, res) => {
 					success: false
 				})
 			} else {
-				console.log('HhF');
+				
 
 				res.status(200).send({
 					donations: docs,
